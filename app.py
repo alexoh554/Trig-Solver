@@ -3,6 +3,8 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
+from helpers import checkInput
+
 app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -22,7 +24,42 @@ Session(app)
 @app.route("/", methods=["GET", "POST"])
 def trig(): 
     if request.method == "POST":
+        # Add user values to lists
+        tmpSides = []
+        tmpSides.append(request.form.get("a"))
+        tmpSides.append(request.form.get("b"))
+        tmpSides.append(request.form.get("c"))
+
+        tmpAngles = []
+        tmpAngles.append(request.form.get("A"))
+        tmpAngles.append(request.form.get("B"))
+        tmpAngles.append(request.form.get("C"))
+
+        # Cast values to float
+        sides = []
+        for side in tmpSides:
+            try:
+                sides.append(float(side))
+            except ValueError:
+                sides.append(None)
         
+        angles = []
+        for angle in tmpAngles:
+            try:
+                angles.append(float(angle))
+            except ValueError:
+                angles.append(None)
+
+        # Check for correct input
+        correctSides = checkInput(sides)
+        correctAngles = checkInput(angles)
+
+        print(sides)
+        print(angles)
+        if correctSides == False or correctAngles == False:
+            session['error'] = "Invalid input"
+            return redirect("/error")
+
         return render_template('solved.html')
     else:
         return render_template("unsolved.html")
@@ -39,6 +76,13 @@ def solution():
             return redirect("/")
         return render_template("solved.html")
 
+@app.route("/error", methods=["GET", "POST"])
+def error():
+    if request.method == "POST":
+        session.clear()
+        return redirect("/")
+    else:
+        return render_template("error.html")
 
 
 
