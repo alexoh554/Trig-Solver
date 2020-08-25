@@ -44,36 +44,59 @@
     </div>
 
     <div class='inputBox'>
-        <form action="/" method="post">
+        <form id="userForm" action="/" method="post">
             <div>
                 <label>Angle of A = </label>
-                <input autocomplete="off" autofocus name="A" type="number">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="A" type="number">
             </div>
             <div>
                 <label>Angle of B = </label>
-                <input autocomplete="off" autofocus name="B" type="text">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="B" type="text">
             </div>
             <div>
                 <label>Angle of C = </label>
-                <input autocomplete="off" autofocus name="C" type="text">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="C" type="text">
             </div>
             <div>
                 <label>Side Length of a = </label>
-                <input autocomplete="off" autofocus name="a" type="text">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="a" type="text">
             </div>
             <div>
                 <label>Side Length of b = </label>
-                <input autocomplete="off" autofocus name="b" type="text">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="b" type="text">
             </div>
             <div>
                 <label>Side Length of c = </label>
-                <input autocomplete="off" autofocus name="c" type="text">
+                <input onkeyup="enableButton()" class='field' autocomplete="off" autofocus name="c" type="text">
             </div>
 
             <div>
-                <button type="submit">Calculate</button>
+                <button id='calculate' disabled="true" class='field' type="submit">Calculate</button>
             </div>
         </form>
     </div>
+
+    <script>
+        function enableButton() 
+        {
+            var filled = 0;
+            var fields = [...document.getElementsByClassName("field")];
+            for (var i = 0; i < 6; i++) 
+            {
+                if (fields[i].value) 
+                {
+                    filled += 1;
+                }
+            }
+            if (filled >= 3) 
+            {
+                document.getElementById("calculate").disabled = false;
+            } 
+            else 
+            {
+                document.getElementById("calculate").disabled = true;
+            }
+        }
+    </script>
 
 {% endblock %}

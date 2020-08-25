@@ -22,9 +22,22 @@ Session(app)
 @app.route("/", methods=["GET", "POST"])
 def trig(): 
     if request.method == "POST":
+        
         return render_template('solved.html')
     else:
         return render_template("unsolved.html")
+
+@app.route("/solution", methods=["GET", "POST"])
+def solution():
+    if request.method == "POST":
+        # Clear session and return user to main page
+        session.clear()
+        return redirect("/")
+    else:
+        # Check if user has inputted an answer
+        if not session["A"]:
+            return redirect("/")
+        return render_template("solved.html")
 
 
 
