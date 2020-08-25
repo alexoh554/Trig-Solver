@@ -63,9 +63,12 @@ def trig():
             for i in range(len(angles)):
                 if angles[i] == None:
                     angles[i] = thirdAngle
-        elif checkAngles(angles) == "Error":
+        if checkAngles(angles) == "Error":
             session['error'] = "Triangles must have a total angle of 180 degrees"
             return redirect("/error")
+        
+
+        
 
         print(angles)
         print(sides)
@@ -93,7 +96,7 @@ def error():
         session.clear()
         return redirect("/")
     else:
-        return render_template("error.html")
+        return render_template("error.html", error_message=session['error'])
 
 
 
