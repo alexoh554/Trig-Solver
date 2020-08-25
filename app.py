@@ -3,7 +3,7 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
-from helpers import checkInput
+from helpers import checkInput, checkAngles, findThirdAngle
 
 app = Flask(__name__)
 
@@ -53,12 +53,23 @@ def trig():
         # Check for correct input
         correctSides = checkInput(sides)
         correctAngles = checkInput(angles)
-
-        print(sides)
-        print(angles)
         if correctSides == False or correctAngles == False:
             session['error'] = "Invalid input"
             return redirect("/error")
+
+        # If possible get the third angle
+        if checkAngles(angles) == True:
+            thirdAngle = findThirdAngle(angles)
+            for i in range(len(angles)):
+                if angles[i] == None:
+                    angles[i] = thirdAngle
+        elif checkAngles(angles) == "Error":
+            session['error'] = "Triangles must have a total angle of 180 degrees"
+            return redirect("/error")
+
+        print(angles)
+        print(sides)
+
 
         return render_template('solved.html')
     else:
