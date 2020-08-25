@@ -1,9 +1,79 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    Input 
+    Trig-Solver: Input 
+{% endblock %}
+
+{% block css %}
+    .inputBox 
+    {
+        position: relative;
+        top: 70px;
+        left: 120px;
+        border-style: solid;
+        border-radius: 25px;
+        min-height: 300px;
+        width: 250px;
+    }
+    .inputBox div 
+    {
+        margin: 25px;
+        text-align: center;
+    }
+    .inputBox input 
+    {
+        display: inline-block;
+        width: 40px;
+        text-align: left;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button 
+    { 
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0; 
+    }
 {% endblock %}
 
 {% block body %}
+    <div>
+        <h2 style='text-align: center; font-family:Courier New, Courier, monospace;'>
+            Enter the values of known sides and/or angles
+        </h2>
+    </div>
+
+    <div class='inputBox'>
+        <form action="/" method="post">
+            <div>
+                <label>Angle of A = </label>
+                <input autocomplete="off" autofocus name="A" type="number">
+            </div>
+            <div>
+                <label>Angle of B = </label>
+                <input autocomplete="off" autofocus name="B" type="text">
+            </div>
+            <div>
+                <label>Angle of C = </label>
+                <input autocomplete="off" autofocus name="C" type="text">
+            </div>
+            <div>
+                <label>Side Length of a = </label>
+                <input autocomplete="off" autofocus name="a" type="text">
+            </div>
+            <div>
+                <label>Side Length of b = </label>
+                <input autocomplete="off" autofocus name="b" type="text">
+            </div>
+            <div>
+                <label>Side Length of c = </label>
+                <input autocomplete="off" autofocus name="c" type="text">
+            </div>
+
+            <div>
+                <button type="submit">Calculate</button>
+            </div>
+        </form>
+    </div>
 
 {% endblock %}

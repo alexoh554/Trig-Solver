@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, url_for, session
 from flask_session import Session
 import requests
+from tempfile import mkdtemp
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ Session(app)
 @app.route("/", methods=["GET", "POST"])
 def trig(): 
     if request.method == "POST":
-
+        return render_template('solved.html')
     else:
         return render_template("unsolved.html")
 

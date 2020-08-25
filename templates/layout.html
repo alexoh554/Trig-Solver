@@ -4,9 +4,59 @@
     <head>
         <link href="/static/icon.ico" rel="icon">
         <title>{% block title %}{% endblock %}</title>
+        <style>{% block css %}{% endblock %}</style>
+        <style>
+            body
+            {
+                position: absolute;
+                margin: 0px;
+                overflow: hidden;
+                top: 0px;
+                bottom: 0px;
+                width: 100%;
+            }
+            #triangle
+            {
+                position: relative;
+                max-width: 650px;
+                height: auto;
+                top: -300px;
+                right: -650px;
+                border-style: solid;
+                border-radius: 25px;
+            }
+            #header
+            {
+                position: relative;
+                background-color: rgb(79,79,79);
+                height: 90px;
+                width: 100%;
+            }
+            #header h1 
+            {
+                color: white; 
+                text-shadow: 0 0 15px black, 0 0 15px black, 0 0 15px black, 0 0 15px black; 
+                text-align: center; 
+                top: 5px; 
+                position: absolute; 
+                height: 100%; 
+                width: 100%; 
+                font-family:'Courier New', Courier, monospace;
+            }
+        </style>
     </head>
     <body>
+        <div id='header'>
+            <h1>
+                Trig-Solver
+            </h1>
+        </div>
         {% block body %}
         {% endblock %}
+
+        <div id='triangle'>
+            <img src='/static/triangle.png' style='border-radius: 25px; width: 100%;'>
+        </div>
+
     </body>
 </html>
