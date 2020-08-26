@@ -3,7 +3,7 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
-from helpers import checkInput, checkAngles, findThirdAngle
+from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide
 
 app = Flask(__name__)
 
@@ -25,17 +25,24 @@ Session(app)
 def trig(): 
     if request.method == "POST":
         # Add user values to lists
-        tmpSides = []
-        tmpSides.append(request.form.get("a"))
-        tmpSides.append(request.form.get("b"))
-        tmpSides.append(request.form.get("c"))
-
         tmpAngles = []
         tmpAngles.append(request.form.get("A"))
         tmpAngles.append(request.form.get("B"))
         tmpAngles.append(request.form.get("C"))
 
+        tmpSides = []
+        tmpSides.append(request.form.get("a"))
+        tmpSides.append(request.form.get("b"))
+        tmpSides.append(request.form.get("c"))
+
         # Cast values to float
+        angles = []
+        for angle in tmpAngles:
+            try:
+                angles.append(float(angle))
+            except ValueError:
+                angles.append(None)
+                
         sides = []
         for side in tmpSides:
             try:
@@ -43,12 +50,7 @@ def trig():
             except ValueError:
                 sides.append(None)
         
-        angles = []
-        for angle in tmpAngles:
-            try:
-                angles.append(float(angle))
-            except ValueError:
-                angles.append(None)
+        
 
         # Check for correct input
         correctSides = checkInput(sides)
@@ -66,10 +68,25 @@ def trig():
         if checkAngles(angles) == "Error":
             session['error'] = "Triangles must have a total angle of 180 degrees"
             return redirect("/error")
-        
 
-        
+        knownAngles = countList(angles)
+        knownSides = countList(sides)
+        if knownSides < 1:
+            session['error'] = "You must provide at least 1 side to be able to solve"
+            return redirect("/error")
 
+        # First check if sine law is possible
+        sineValue = sinePossible(angles, sides)
+        if sineValue != None:
+            for i in range(3):
+                if angles[i] == None:
+                    angles[i] = sineLawAngle(angles[i], sides[i], sineValue)
+                if sides[i] == None:
+                    sides[i] = sineLawSide(sides[i], angles[i], sineValue)
+
+
+        # If not use cosine law
+        
         print(angles)
         print(sides)
 

@@ -1,9 +1,28 @@
 {% extends 'layout.html' %}
 
+{% block css %}
+    .errorBox 
+    {
+        position: relative;
+        top: 70px;
+        left: 120px;
+        border-style: solid;
+        border-radius: 25px;
+        min-height: 300px;
+        width: 250px;
+    }
+{% endblock %}
+
 {% block body %}
     <div>
         <h2 style='text-align: center; font-family:Courier New, Courier, monospace;'>
             {{ error_message }}
         </h2>
+    </div>
+
+    <div class='errorBox'>
+        <h1 style='text-align: center; font-family:Courier New, Courier, monospace; margin-top: 50%;'>
+            ERROR!
+        </h1>
     </div>
 {% endblock %}
