@@ -35,23 +35,29 @@ def trig():
         tmpSides.append(request.form.get("b"))
         tmpSides.append(request.form.get("c"))
 
-        # Cast values to float
+        # Cast values to float. If error occurs redirect to error page
         angles = []
         for angle in tmpAngles:
-            try:
-                angles.append(float(angle))
-            except ValueError:
+            if angle == "":
                 angles.append(None)
-                
+            else:
+                try:
+                    angles.append(float(angle))
+                except ValueError:
+                    session['error'] = "Invalid input"
+                    return redirect("/error")
+
         sides = []
         for side in tmpSides:
-            try:
-                sides.append(float(side))
-            except ValueError:
+            if side == "":
                 sides.append(None)
+            else:
+                try:
+                    sides.append(float(side))
+                except ValueError:
+                    session['error'] = "Invalid input"
+                    return redirect("/error")
         
-        
-
         # Check for correct input
         correctSides = checkInput(sides)
         correctAngles = checkInput(angles)
@@ -78,12 +84,30 @@ def trig():
         # First check if sine law is possible
         sineValue = sinePossible(angles, sides)
         if sineValue != None:
-            for i in range(3):
-                if angles[i] == None:
-                    angles[i] = sineLawAngle(angles[i], sides[i], sineValue)
-                if sides[i] == None:
-                    sides[i] = sineLawSide(sides[i], angles[i], sineValue)
+            while(True):
+                for i in range(3):
+                    if angles[i] == None:
+                        if sides[i] == None:
+                            continue
+                        else:
+                            angles[i] = sineLawAngle(angles[i], sides[i], sineValue)
+                    if sides[i] == None:
+                        if angles[i] == None:
+                            continue
+                        else:
+                            sides[i] = sineLawSide(sides[i], angles[i], sineValue)
+                if checkAngles(angles) == True:
+                    thirdAngle = findThirdAngle(angles)
+                    for i in range(len(angles)):
+                        if angles[i] == None:
+                            angles[i] = thirdAngle
+                if None in sides:
+                    continue
+                else:
+                    break
+                
 
+            # Run sine law again for values that were skipped
 
         # If not use cosine law
         

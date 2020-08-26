@@ -50,7 +50,7 @@ def sinePossible(angles, sides):
 
 def sineLawAngle(angle, side, sineValue):
     sineValue = sineValue * side
-    angle = math.asin(math.radians(sineValue))
+    angle = math.degrees(math.asin(sineValue))
     return angle
 
 def sineLawSide(side, angle, sineValue):
