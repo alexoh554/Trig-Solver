@@ -26,10 +26,10 @@ def checkAngles(angles):
         return False
 
 def findThirdAngle(angles):
-    thirdAngle = Decimal(180)
+    thirdAngle = 180.0
     for angle in angles:
         if angle != None:
-            thirdAngle = Decimal(thirdAngle) - Decimal(angle)
+            thirdAngle = thirdAngle - angle
     return thirdAngle
 
 def countList(items):
@@ -44,26 +44,23 @@ def sinePossible(angles, sides):
     for i in range(3):
         if angles[i] != None:
             if sides[i] != None:
-                sine = math.sin(math.radians(angles[i])) / sides[i]
-                return sine
+                return math.sin(math.radians(angles[i])) / sides[i]
     return None
 
 def sineLawAngle(angle, side, sineValue):
     sineValue = sineValue * side
     try:
-        angle = math.degrees(math.asin(sineValue))
-        return angle
+        return math.degrees(math.asin(sineValue))
     except ValueError:
         return None
 
 def sineLawSide(side, angle, sineValue):
     tmp = math.sin(math.radians(angle))
-    side = tmp / sineValue
-    return side
+    return tmp / sineValue
 
 def ambiguousCalculate(old, new):
-    new2 = Decimal(180) - Decimal(new[0])
-    ambAngle = Decimal(180) - Decimal(new2) - Decimal(old[0])
+    new2 = 180.0 - new[0]
+    ambAngle = 180.0 - new2 - old[0]
     if ambAngle < 0:
         return None
     else:
@@ -85,8 +82,7 @@ def cosineAngle(sides, key):
     denominator = 2 * newSides[1] * newSides[2]
     angle = numerator / denominator
     try:
-        angle = math.degrees(math.acos(angle))
-        return angle
+        return math.degrees(math.acos(angle))
     except ValueError:
         return None
 def cosineSide(sides, angle, key):
