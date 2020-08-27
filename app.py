@@ -3,7 +3,7 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
-from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide, ambiguousCalculate
+from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide, ambiguousCalculate, cosineAngle, cosineSide
 
 
 app = Flask(__name__)
@@ -36,8 +36,8 @@ def trig():
         tmpSides.append(request.form.get("b"))
         tmpSides.append(request.form.get("c"))
 
-        ambOld = [] # Stores angles that were given to by the user
-        # Cast values to float. If error occurs redirect to error page
+        ambOld = []                                     # Stores angles that were given to by the user
+                                                        # Cast values to float. If error occurs redirect to error page
         angles = []
         for angle in tmpAngles:
             if angle == "":
@@ -84,8 +84,8 @@ def trig():
             session['error'] = "You must provide at least 1 side to be able to solve"
             return redirect("/error")
 
-        ambiguousCase = False # True if ambiguous case is possible
-        ambNew = []           # List that stores new angles found during sine law
+        ambiguousCase = False                           # True if ambiguous case is possible
+        ambNew = []                                     # List that stores new angles found during sine law
         # First check if sine law is possible
         sineValue = sinePossible(angles, sides)
         if sineValue != None:
@@ -97,6 +97,9 @@ def trig():
                             continue
                         else:
                             angles[i] = sineLawAngle(angles[i], sides[i], sineValue)
+                            if angles[i] == None:
+                                session['error'] = "No solution"
+                                return redirect("/error")
                             ambNew.append(angles[i])
                     if sides[i] == None:
                         if angles[i] == None:
@@ -117,11 +120,29 @@ def trig():
                 ambiguousAngles = ambiguousCalculate(ambOld, ambNew)
                 if ambiguousAngles != None:
                     ambiguousCase == True
+        else:
+            while(True):                                    # Calculate with cosine law
+                if knownSides == 3:                         # If all sides are known, calculate all angles
+                    for i in range(3):
+                        angles[i] = cosineAngle(sides, i)
+                        if angles[i] == None:
+                            session['error'] = "No solution"
+                            return redirect("/error")
+                else:                                       # Else find all sides and repeat loop until all values known
+                    for j in range(3):
+                        if sides[j] == None:
+                            if angles[j] != None:
+                                sides[j] = cosineSide(sides, angles[j], j)
+                                knownSides = 3
+                if None in sides or None in angles:
+                    continue
+                else:
+                    break
 
-        # If not use cosine law
         print(angles)
         print(sides)
-        print(ambiguousAngles)
+        if ambiguousCase == True:
+            print(ambiguousAngles)
 
 
         return render_template('solved.html')

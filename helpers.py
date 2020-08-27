@@ -50,8 +50,11 @@ def sinePossible(angles, sides):
 
 def sineLawAngle(angle, side, sineValue):
     sineValue = sineValue * side
-    angle = math.degrees(math.asin(sineValue))
-    return angle
+    try:
+        angle = math.degrees(math.asin(sineValue))
+        return angle
+    except ValueError:
+        return None
 
 def sineLawSide(side, angle, sineValue):
     tmp = math.sin(math.radians(angle))
@@ -69,3 +72,30 @@ def ambiguousCalculate(old, new):
         newAngles.append(new2)
         newAngles.append(ambAngle)
         return newAngles
+
+def cosineAngle(sides, key):
+    # Reorder sides by key
+    newSides = []
+    newSides.append(sides[key])
+    for side in sides:
+        if side != sides[key]:
+            newSides.append(side)
+    # Run formula
+    numerator = newSides[1]**2 + newSides[2]**2 - newSides[0]**2
+    denominator = 2 * newSides[1] * newSides[2]
+    angle = numerator / denominator
+    try:
+        angle = math.degrees(math.acos(angle))
+        return angle
+    except ValueError:
+        return None
+def cosineSide(sides, angle, key):
+    # Find angles that are not key
+    otherSides = []
+    for side in sides:
+        if side != sides[key]:
+            otherSides.append(side)
+    equation1 = otherSides[0]**2 + otherSides[1]**2
+    equation2 = 2 * otherSides[0] * otherSides[1] * math.cos(math.radians(angle))
+    newSide = equation1 - equation2
+    return math.sqrt(newSide)
