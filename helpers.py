@@ -57,3 +57,15 @@ def sineLawSide(side, angle, sineValue):
     tmp = math.sin(math.radians(angle))
     side = tmp / sineValue
     return side
+
+def ambiguousCalculate(old, new):
+    new2 = Decimal(180) - Decimal(new[0])
+    ambAngle = Decimal(180) - Decimal(new2) - Decimal(old[0])
+    if ambAngle < 0:
+        return None
+    else:
+        newAngles = []
+        newAngles.append(old)
+        newAngles.append(new2)
+        newAngles.append(ambAngle)
+        return newAngles

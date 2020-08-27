@@ -3,7 +3,8 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
-from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide
+from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide, ambiguousCalculate
+
 
 app = Flask(__name__)
 
@@ -35,6 +36,7 @@ def trig():
         tmpSides.append(request.form.get("b"))
         tmpSides.append(request.form.get("c"))
 
+        ambOld = [] # Stores angles that were given to by the user
         # Cast values to float. If error occurs redirect to error page
         angles = []
         for angle in tmpAngles:
@@ -43,6 +45,7 @@ def trig():
             else:
                 try:
                     angles.append(float(angle))
+                    ambOld.append(float(angle))
                 except ValueError:
                     session['error'] = "Invalid input"
                     return redirect("/error")
@@ -81,9 +84,12 @@ def trig():
             session['error'] = "You must provide at least 1 side to be able to solve"
             return redirect("/error")
 
+        ambiguousCase = False # True if ambiguous case is possible
+        ambNew = []           # List that stores new angles found during sine law
         # First check if sine law is possible
         sineValue = sinePossible(angles, sides)
         if sineValue != None:
+            # Calculate with sine law until all values are found
             while(True):
                 for i in range(3):
                     if angles[i] == None:
@@ -91,6 +97,7 @@ def trig():
                             continue
                         else:
                             angles[i] = sineLawAngle(angles[i], sides[i], sineValue)
+                            ambNew.append(angles[i])
                     if sides[i] == None:
                         if angles[i] == None:
                             continue
@@ -105,14 +112,16 @@ def trig():
                     continue
                 else:
                     break
-                
-
-            # Run sine law again for values that were skipped
+            # If possible solve ambiguous case
+            if len(ambOld) == 1 and len(ambNew) == 1:
+                ambiguousAngles = ambiguousCalculate(ambOld, ambNew)
+                if ambiguousAngles != None:
+                    ambiguousCase == True
 
         # If not use cosine law
-        
         print(angles)
         print(sides)
+        print(ambiguousAngles)
 
 
         return render_template('solved.html')
