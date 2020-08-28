@@ -15,6 +15,19 @@
         min-height: 300px;
         width: 250px;
     }
+    .butt2
+    {
+        position: relative;
+        top: -300px;
+    }
+    .butt2 button
+    {   
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 30px;
+    }
 {% endblock %}
 
 {% block body %}
@@ -29,4 +42,8 @@
             ERROR!
         </h1>
     </div>
+
+    <form action='/error' method='post' class='butt2'>
+        <button>Try again</button>
+    </form>
 {% endblock %}

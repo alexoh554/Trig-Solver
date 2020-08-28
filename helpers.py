@@ -75,7 +75,7 @@ def ambiguousOrder(ambAngles, angles):
     newOrder = []
     for i in range(3):
         for j in range(3):
-            if ambAngles[i] == angles[j]:
+            if ambAngles[i] == angles[j]:  # if elements 
                 key = i - j
     for k in range(3):
         index = k + key
@@ -83,11 +83,16 @@ def ambiguousOrder(ambAngles, angles):
             index = 0
         if index == -1:
             index = 2
-        newOrder.append(ambAngles[index])
-            
-
+        newOrder.append(ambAngles[index])       
     return newOrder
             
+def sineLawAmb(angles, sides, index):
+    index2 = index + 1
+    if index2 == 3:
+        index2 = 0
+    newSide = sides[index2] * math.sin(math.radians(angles[index]))
+    return round(newSide / math.sin(math.radians(angles[index2])), 2)
+
 
 def cosineAngle(sides, key):
     # Reorder sides by key

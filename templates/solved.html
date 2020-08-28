@@ -4,17 +4,92 @@
     Trig-Solver: Output 
 {% endblock %}
 
+{% block css %}
+.outputBox 
+{
+    position: absolute;
+    top: 37%;
+    border-style: solid;
+    border-radius: 25px;
+    min-height: 300px;
+    width: 250px;
+}
+.outputBox div 
+{
+    margin: 25px;
+    text-align: center;
+}
+.butt 
+{
+    position: relative;
+    top: 10px;
+}
+.butt button
+{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 30px;
+}
+{% endblock %}
+
 {% block body %}
     {% if ambiguousCase == True %}
         <div>
-            <h2>There are two possible solutions</h2>
+            <h2 style='text-align: center; font-family:Courier New, Courier, monospace;'>There are two possible solutions</h2>
         </div>
     {% else %}
         <div>
-            <h2>There is one possible solution</h2>
+            <h2 style='text-align: center; font-family:Courier New, Courier, monospace;'>There is one possible solution</h2>
         </div>
     {% endif %}
-
+    <div class='outputBox' {% if ambiguousCase == True %}style='left: 70px;'{% else %}style='left: 120px;'{% endif %}>
+        <div>
+            <label>Angle of A{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ angles[0] }}&deg</label>
+        </div>
+        <div>
+            <label>Angle of B{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ angles[1] }}&deg</label>
+        </div>
+        <div>
+            <label>Angle of C{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ angles[2] }}&deg</label>
+        </div>
+        <div>
+            <label>Side Length of a{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ sides[0] }}</label>
+        </div>
+        <div>
+            <label>Side Length of b{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ sides[1] }}</label>
+        </div>
+        <div>
+            <label>Side Length of c{% if ambiguousCase == True %}<sub>1</sub>{% endif %} = {{ sides[2] }}</label>
+        </div>
+    </div>
     
+    {% if ambiguousCase == True %}
+    <div class='outputBox' style='left: 350px;'>
+        <div>
+            <label>Angle of A<sub>2</sub> = {{ ambAngles[0] }}&deg</label>
+        </div>
+        <div>
+            <label>Angle of B<sub>2</sub> = {{ ambAngles[1] }}&deg</label>
+        </div>
+        <div>
+            <label>Angle of C<sub>2</sub> = {{ ambAngles[2] }}&deg</label>
+        </div>
+        <div>
+            <label>Side Length of a<sub>2</sub> = {{ ambSides[0] }}</label>
+        </div>
+        <div>
+            <label>Side Length of b<sub>2</sub> = {{ ambSides[1] }}</label>
+        </div>
+        <div>
+            <label>Side Length of c<sub>2</sub> = {{ ambSides[2] }}</label>
+        </div>
+    </div>
+
+    {% endif %}
+    <form action='/solution' method='post' class='butt'>
+        <button>Try again</button>
+    </form>
 
 {% endblock %}

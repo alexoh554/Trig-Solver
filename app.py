@@ -3,7 +3,7 @@ from flask_session import Session
 import requests
 from tempfile import mkdtemp
 
-from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide, ambiguousCalculate, ambiguousOrder, cosineAngle, cosineSide
+from helpers import checkInput, checkAngles, findThirdAngle, countList, sinePossible, sineLawAngle, sineLawSide, ambiguousCalculate, ambiguousOrder, sineLawAmb, cosineAngle, cosineSide
 
 
 app = Flask(__name__)
@@ -120,7 +120,17 @@ def trig():
                 ambiguousAngles = ambiguousCalculate(ambOld, ambNew)
                 if ambiguousAngles != None:
                     ambiguousCase = True
+                    findAmb = ambiguousAngles[2]
                     ambiguousAngles = ambiguousOrder(ambiguousAngles, angles)
+                    # Use sine law to find ambiguous side
+                    ambiguousSides = sides.copy()
+                    ambIndex = 0
+                    for i in range(3):
+                        if ambiguousAngles[i] == findAmb:
+                            ambIndex = i
+                    ambiguousSides[ambIndex] = sineLawAmb(ambiguousAngles, ambiguousSides, ambIndex)
+                    for i in range(3):
+                        ambiguousSides[i] = round(ambiguousSides[i], 2)
         else:
             while(True):                                    # Calculate with cosine law
                 if knownSides == 3:                         # If all sides are known, calculate all angles
@@ -154,15 +164,13 @@ def trig():
             for k in range(3):
                 ambiguousAngles[k] = round(ambiguousAngles[k], 2)
             session['ambAngles'] = ambiguousAngles
+            session['ambSides'] = ambiguousSides
         else:
             session['ambTrue'] = False
             session['ambAngles'] = None
 
-        print(session['angles'])
-        print(session['sides'])
-        print(session['ambTrue'])
-        print(session['ambAngles'])
-        return render_template('solved.html')
+        session['inputted'] = True
+        return redirect('/solution')
     else:
         return render_template("unsolved.html")
 
@@ -174,11 +182,12 @@ def solution():
         return redirect("/")
     else:
         # Check if user has inputted an answer
-        if not session["angles"]:
+        if session.get('inputted') != True:
             return redirect("/")
-            
-        
-        return render_template("solved.html", ambiguousCase=session['ambTrue'], angles=session['angles'], sides=session['sides'])
+        if session['ambTrue'] == True:
+            return render_template("solved.html", ambiguousCase=session['ambTrue'], angles=session['angles'], sides=session['sides'], ambAngles=session['ambAngles'], ambSides=session['ambSides'])
+        else:
+            return render_template("solved.html", angles=session['angles'], sides=session['sides'])
 
 @app.route("/error", methods=["GET", "POST"])
 def error():
