@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Trig-Solver: Output 
+{% endblock %}
+
+{% block body %}
+    {% if ambiguousCase == True %}
+        <div>
+            <h2>There are two possible solutions</h2>
+        </div>
+    {% else %}
+        <div>
+            <h2>There is one possible solution</h2>
+        </div>
+    {% endif %}
+
+    
+
+{% endblock %}

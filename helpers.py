@@ -65,10 +65,29 @@ def ambiguousCalculate(old, new):
         return None
     else:
         newAngles = []
-        newAngles.append(old)
+        newAngles.append(old[0])
         newAngles.append(new2)
         newAngles.append(ambAngle)
         return newAngles
+
+def ambiguousOrder(ambAngles, angles):
+    key = 0
+    newOrder = []
+    for i in range(3):
+        for j in range(3):
+            if ambAngles[i] == angles[j]:
+                key = i - j
+    for k in range(3):
+        index = k + key
+        if index == 3:
+            index = 0
+        if index == -1:
+            index = 2
+        newOrder.append(ambAngles[index])
+            
+
+    return newOrder
+            
 
 def cosineAngle(sides, key):
     # Reorder sides by key
