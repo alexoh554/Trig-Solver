@@ -29,4 +29,4 @@ pip install -r requirements.txt
 * Run the program with `flask run`
 
 ## License
-* [License](LICENSE.md)
+* [License](LICENSE)
