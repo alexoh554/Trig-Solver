@@ -6,10 +6,10 @@ The user will be prompted to input a minimum of three values consisting of sides
 
 This program also calculates the ambiguous case if applicable.
 ### Screenshots
-![Screenshot](/static/screenshot1.png?raw=true)
-![Screenshot](/static/screenshot2.png?raw=true)
-![Screenshot](/static/screenshot3.png?raw=true)
-![Screenshot](/static/screenshot4.png?raw=true)
+![Screenshot](/static/Screenshot1.png?raw=true)
+![Screenshot](/static/Screenshot2.png?raw=true)
+![Screenshot](/static/Screenshot3.png?raw=true)
+![Screenshot](/static/Screenshot4.png?raw=true)
 
 ## Getting started
 ### Requirements
